@@ -12,5 +12,6 @@ data class Cocktail(
     val timer: Int,
     val category: String,
     val alcoholic: Boolean,
-    val imageRes: String
+    val imageRes: String,
+    var notes: String = ""
 ) : Parcelable

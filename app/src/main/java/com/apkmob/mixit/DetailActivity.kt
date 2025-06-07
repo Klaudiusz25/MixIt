@@ -9,9 +9,14 @@ import com.apkmob.mixit.data.Cocktail
 import com.apkmob.mixit.ui.theme.MixItTheme
 
 class DetailActivity : ComponentActivity() {
+    private val viewModel: DetailViewModel by viewModels {
+        DetailViewModelFactory(application, intent.getParcelableExtra<Cocktail>("cocktail")?.id ?: 0)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val cocktail = intent.getParcelableExtra<Cocktail>("cocktail")
+
         if (cocktail == null) {
             Toast.makeText(this, "Błąd: brak koktajlu", Toast.LENGTH_SHORT).show()
             finish()
@@ -20,7 +25,7 @@ class DetailActivity : ComponentActivity() {
 
         setContent {
             MixItTheme {
-                val viewModel: DetailViewModel by viewModels()
+                viewModel.loadCocktail(cocktail.id)
                 DetailScreen(
                     cocktail = cocktail,
                     viewModel = viewModel,

@@ -13,7 +13,8 @@
     "timer": 120,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "mojito"
+    "imageRes": "mojito",
+    "notes": ""
   },
   {
     "id": 2,
@@ -28,7 +29,8 @@
     "timer": 180,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "margarita"
+    "imageRes": "margarita",
+    "notes": ""
   },
   {
     "id": 3,
@@ -43,7 +45,8 @@
     "timer": 150,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "pina_colada"
+    "imageRes": "pina_colada",
+    "notes": ""
   },
   {
     "id": 4,
@@ -58,7 +61,8 @@
     "timer": 90,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "sex_on_beach"
+    "imageRes": "sex_on_beach",
+    "notes": ""
   },
   {
     "id": 5,
@@ -74,7 +78,8 @@
     "timer": 210,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "cosmopolitan"
+    "imageRes": "cosmopolitan",
+    "notes": ""
   },
   {
     "id": 6,
@@ -91,7 +96,8 @@
     "timer": 240,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "mai_tai"
+    "imageRes": "mai_tai",
+    "notes": ""
   },
   {
     "id": 7,
@@ -106,7 +112,8 @@
     "timer": 90,
     "category": "easy",
     "alcoholic": false,
-    "imageRes": "virgin_mojito"
+    "imageRes": "virgin_mojito",
+    "notes": ""
   },
   {
     "id": 8,
@@ -121,7 +128,8 @@
     "timer": 60,
     "category": "easy",
     "alcoholic": false,
-    "imageRes": "shirley_temple"
+    "imageRes": "shirley_temple",
+    "notes": ""
   },
   {
     "id": 9,
@@ -137,7 +145,8 @@
     "timer": 180,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "old_fashioned"
+    "imageRes": "old_fashioned",
+    "notes": ""
   },
   {
     "id": 10,
@@ -152,7 +161,8 @@
     "timer": 210,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "espresso_martini"
+    "imageRes": "espresso_martini",
+    "notes": ""
   },
   {
     "id": 11,
@@ -167,7 +177,8 @@
     "timer": 90,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "aperol_spritz"
+    "imageRes": "aperol_spritz",
+    "notes": ""
   },
   {
     "id": 12,
@@ -182,7 +193,8 @@
     "timer": 120,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "blue_lagoon"
+    "imageRes": "blue_lagoon",
+    "notes": ""
   },
   {
     "id": 13,
@@ -196,7 +208,8 @@
     "timer": 120,
     "category": "easy",
     "alcoholic": false,
-    "imageRes": "virgin_pina_colada"
+    "imageRes": "virgin_pina_colada",
+    "notes": ""
   },
   {
     "id": 14,
@@ -211,7 +224,8 @@
     "timer": 150,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "negroni"
+    "imageRes": "negroni",
+    "notes": ""
   },
   {
     "id": 15,
@@ -225,6 +239,7 @@
     "timer": 60,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "mimosa"
+    "imageRes": "mimosa",
+    "notes": ""
   }
 ]

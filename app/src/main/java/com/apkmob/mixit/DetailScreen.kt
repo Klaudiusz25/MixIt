@@ -51,6 +51,7 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { openSmsApp() },
+                modifier = Modifier.padding(bottom = 80.dp),
                 icon = { Icon(Icons.Default.Send, contentDescription = "Wyślij") },
                 text = { Text("Wyślij składniki") }
             )
@@ -72,7 +73,7 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
         ) {
-            // Obraz koktajlu - teraz będzie się zwijał razem z paskiem aplikacji
+            // Obraz koktajlu
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -104,11 +105,9 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = cocktail.instructions)
 
-                // Sekcja timera i notatek
+                // Sekcja timera
                 if (cocktail.timer > 0) {
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text("Czas potrzebny do przyrządzenia: ${viewModel.lastRecordedTime}s")
-                    Spacer(modifier = Modifier.height(8.dp))
                     Text("Aktualny czas: ${viewModel.timerValue}s")
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(onClick = { viewModel.startTimer() }) {
@@ -125,10 +124,11 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
                         }
                     }
 
+                    // Sekcja notatek (działająca)
                     Spacer(modifier = Modifier.height(16.dp))
                     OutlinedTextField(
-                        value = viewModel.note,
-                        onValueChange = { viewModel.note = it },
+                        value = viewModel.cocktail?.notes ?: "",
+                        onValueChange = { viewModel.updateNotes(it) },
                         label = { Text("Twoje notatki") },
                         modifier = Modifier.fillMaxWidth()
                     )
