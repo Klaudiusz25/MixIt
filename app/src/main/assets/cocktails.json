@@ -1,0 +1,230 @@
+[
+  {
+    "id": 1,
+    "name": "Mojito",
+    "ingredients": [
+      "50 ml białego rumu",
+      "1/2 limonki pokrojonej w ćwiartki",
+      "2 łyżeczki cukru",
+      "6-8 liści mięty",
+      "Woda sodowa"
+    ],
+    "instructions": "W szklance rozgnieć liście mięty z cukrem i limonką. Dodaj lód, rum i uzupełnij wodą sodową. Delikatnie wymieszaj.",
+    "timer": 120,
+    "category": "easy",
+    "alcoholic": true,
+    "imageRes": "mojito"
+  },
+  {
+    "id": 2,
+    "name": "Margarita",
+    "ingredients": [
+      "50 ml tequili",
+      "25 ml triple sec (Cointreau)",
+      "25 ml soku z limonki",
+      "Sól na brzeg szkła"
+    ],
+    "instructions": "Zamroź kieliszek koktajlowy. Brzeg zwilż limonką i zanurz w soli. W shakerze zmieszaj składniki z lodem, przecedź do kieliszka.",
+    "timer": 180,
+    "category": "hard",
+    "alcoholic": true,
+    "imageRes": "margarita"
+  },
+  {
+    "id": 3,
+    "name": "Piña Colada",
+    "ingredients": [
+      "50 ml białego rumu",
+      "50 ml mleka kokosowego",
+      "100 ml soku ananasowego",
+      "Plasterek ananasa do dekoracji"
+    ],
+    "instructions": "Wszystkie składniki zmiksuj z lodem. Przelej do wysokiej szklanki, udekoruj ananasem.",
+    "timer": 150,
+    "category": "easy",
+    "alcoholic": true,
+    "imageRes": "pina_colada"
+  },
+  {
+    "id": 4,
+    "name": "Sex on the Beach",
+    "ingredients": [
+      "40 ml wódki",
+      "20 ml likieru brzoskwiniowego",
+      "40 ml soku pomarańczowego",
+      "40 ml soku żurawinowego"
+    ],
+    "instructions": "W shakerze zmieszaj składniki z lodem. Przelej do wysokiej szklanki z lodem.",
+    "timer": 90,
+    "category": "easy",
+    "alcoholic": true,
+    "imageRes": "sex_on_beach"
+  },
+  {
+    "id": 5,
+    "name": "Cosmopolitan",
+    "ingredients": [
+      "40 ml wódki cytrynowej",
+      "15 ml triple sec",
+      "15 ml soku z limonki",
+      "30 ml soku żurawinowego",
+      "Skórka pomarańczy do dekoracji"
+    ],
+    "instructions": "Wszystkie składniki wstrząśnij z lodem w shakerze. Przecedź do schłodzonego kieliszka koktajlowego.",
+    "timer": 210,
+    "category": "hard",
+    "alcoholic": true,
+    "imageRes": "cosmopolitan"
+  },
+  {
+    "id": 6,
+    "name": "Mai Tai",
+    "ingredients": [
+      "30 ml ciemnego rumu",
+      "30 ml jasnego rumu",
+      "15 ml likieru triple sec",
+      "15 ml likieru orzechowego",
+      "20 ml soku z limonki",
+      "10 ml syropu cukrowego"
+    ],
+    "instructions": "W shakerze wymieszaj wszystkie składniki z lodem. Przelej do szklanki z lodem, udekoruj plasterkiem pomarańczy i wiśnią.",
+    "timer": 240,
+    "category": "hard",
+    "alcoholic": true,
+    "imageRes": "mai_tai"
+  },
+  {
+    "id": 7,
+    "name": "Virgin Mojito",
+    "ingredients": [
+      "1/2 limonki pokrojonej w ćwiartki",
+      "2 łyżeczki cukru",
+      "6-8 liści mięty",
+      "Woda sodowa"
+    ],
+    "instructions": "W szklance rozgnieć liście mięty z cukrem i limonką. Dodaj lód i uzupełnij wodą sodową. Delikatnie wymieszaj.",
+    "timer": 90,
+    "category": "easy",
+    "alcoholic": false,
+    "imageRes": "virgin_mojito"
+  },
+  {
+    "id": 8,
+    "name": "Shirley Temple",
+    "ingredients": [
+      "100 ml lemoniady",
+      "20 ml grenadyny",
+      "Plasterek pomarańczy",
+      "Wiśnia koktajlowa"
+    ],
+    "instructions": "Wypełnij szklankę lodem. Wlej lemoniadę, następnie grenadynę. Udekoruj owocami.",
+    "timer": 60,
+    "category": "easy",
+    "alcoholic": false,
+    "imageRes": "shirley_temple"
+  },
+  {
+    "id": 9,
+    "name": "Old Fashioned",
+    "ingredients": [
+      "50 ml bourbona",
+      "1 kostka cukru",
+      "2-3 krople angostury",
+      "Plasterek pomarańczy",
+      "Wiśnia koktajlowa"
+    ],
+    "instructions": "W szklance rozpuść cukier z angosturą. Dodaj bourbon i lód. Delikatnie wymieszaj. Udekoruj owocami.",
+    "timer": 180,
+    "category": "hard",
+    "alcoholic": true,
+    "imageRes": "old_fashioned"
+  },
+  {
+    "id": 10,
+    "name": "Espresso Martini",
+    "ingredients": [
+      "50 ml wódki",
+      "25 ml likieru kawowego",
+      "1 świeżo zaparzony espresso",
+      "Ziarna kawy do dekoracji"
+    ],
+    "instructions": "Wszystkie składniki wstrząśnij z lodem w shakerze. Przecedź do schłodzonego kieliszka koktajlowego. Udekoruj ziarnami kawy.",
+    "timer": 210,
+    "category": "hard",
+    "alcoholic": true,
+    "imageRes": "espresso_martini"
+  },
+  {
+    "id": 11,
+    "name": "Aperol Spritz",
+    "ingredients": [
+      "60 ml Aperolu",
+      "90 ml prosecco",
+      "30 ml wody sodowej",
+      "Plasterek pomarańczy"
+    ],
+    "instructions": "Do szklanki z lodem wlej Aperol, następnie prosecco i wodę sodową. Delikatnie wymieszaj. Udekoruj pomarańczą.",
+    "timer": 90,
+    "category": "easy",
+    "alcoholic": true,
+    "imageRes": "aperol_spritz"
+  },
+  {
+    "id": 12,
+    "name": "Blue Lagoon",
+    "ingredients": [
+      "50 ml wódki",
+      "25 ml blue curaçao",
+      "100 ml lemoniady",
+      "Plasterek cytryny"
+    ],
+    "instructions": "W szklance z lodem wymieszaj wódkę i blue curaçao. Uzupełnij lemoniadą. Udekoruj cytryną.",
+    "timer": 120,
+    "category": "easy",
+    "alcoholic": true,
+    "imageRes": "blue_lagoon"
+  },
+  {
+    "id": 13,
+    "name": "Virgin Piña Colada",
+    "ingredients": [
+      "50 ml mleka kokosowego",
+      "100 ml soku ananasowego",
+      "Plasterek ananasa do dekoracji"
+    ],
+    "instructions": "Wszystkie składniki zmiksuj z lodem. Przelej do wysokiej szklanki, udekoruj ananasem.",
+    "timer": 120,
+    "category": "easy",
+    "alcoholic": false,
+    "imageRes": "virgin_pina_colada"
+  },
+  {
+    "id": 14,
+    "name": "Negroni",
+    "ingredients": [
+      "30 ml ginu",
+      "30 ml Campari",
+      "30 ml czerwonego vermutu",
+      "Plasterek pomarańczy"
+    ],
+    "instructions": "Wszystkie składniki wymieszaj w szklance z lodem. Udekoruj pomarańczą.",
+    "timer": 150,
+    "category": "hard",
+    "alcoholic": true,
+    "imageRes": "negroni"
+  },
+  {
+    "id": 15,
+    "name": "Mimosa",
+    "ingredients": [
+      "75 ml prosecco",
+      "75 ml soku pomarańczowego",
+      "Plasterek pomarańczy"
+    ],
+    "instructions": "Do kieliszka szampana wlej sok pomarańczowy, następnie prosecco. Delikatnie wymieszaj. Udekoruj pomarańczą.",
+    "timer": 60,
+    "category": "easy",
+    "alcoholic": true,
+    "imageRes": "mimosa"
+  }
+]
