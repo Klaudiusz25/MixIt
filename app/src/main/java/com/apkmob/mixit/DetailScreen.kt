@@ -18,6 +18,11 @@ import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.rememberAsyncImagePainter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,14 +82,24 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+                    .height(300.dp) // Większa wysokość dla pionowego układu
             ) {
-                Icon(
-                    imageVector = Icons.Default.LocalBar,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp).align(Alignment.Center)
-                )
+                if (cocktail.imageUrl.isNotEmpty()) {
+                    Image(
+                        painter = rememberAsyncImagePainter(cocktail.imageUrl),
+                        contentDescription = "Zdjęcie koktajlu",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(400.dp), // Stała wysokość
+                        contentScale = ContentScale.Fit // Pokazuje cały obrazek bez przycinania
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.LocalBar,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp).align(Alignment.Center)
+                    )
+                }
             }
 
             // Reszta zawartości
@@ -107,22 +122,84 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
 
                 // Sekcja timera
                 if (cocktail.timer > 0) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text("Aktualny czas: ${viewModel.timerValue}s")
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Button(onClick = { viewModel.startTimer() }) {
-                            Text("Start")
-                        }
-                        Button(onClick = { viewModel.pauseTimer() }) {
-                            Text("Pauza")
-                        }
-                        Button(onClick = { viewModel.resumeTimer() }) {
-                            Text("Wznów")
-                        }
-                        Button(onClick = { viewModel.stopTimer() }) {
-                            Text("Stop")
+                    val formattedTime by remember(viewModel.timerValue) {
+                        derivedStateOf {
+                            val minutes = viewModel.timerValue / 60
+                            val seconds = viewModel.timerValue % 60
+                            String.format("%02d:%02d", minutes, seconds)
                         }
                     }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp)
+                    ) {
+                        // Okrągły timer
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.size(150.dp).align(Alignment.CenterHorizontally)
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(150.dp),
+                                strokeWidth = 8.dp,
+                                color = MaterialTheme.colorScheme.primary,
+                                trackColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(
+                                    text = "Timer",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = formattedTime,
+                                    style = MaterialTheme.typography.displayMedium
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Kontrolki timera - zachowane wszystkie 4 przyciski
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Button(
+                                onClick = { viewModel.startTimer() },
+                                modifier = Modifier.weight(1f),
+                                enabled = !viewModel.isTimerRunning && viewModel.timerValue == 0
+                            ) {
+                                Text("Start")
+                            }
+
+                            Button(
+                                onClick = { viewModel.pauseTimer() },
+                                modifier = Modifier.weight(1f),
+                                enabled = viewModel.isTimerRunning
+                            ) {
+                                Text("Pauza")
+                            }
+
+                            Button(
+                                onClick = { viewModel.resumeTimer() },
+                                modifier = Modifier.weight(1f),
+                                enabled = !viewModel.isTimerRunning && viewModel.timerValue > 0
+                            ) {
+                                Text("Wznów")
+                            }
+
+                            Button(
+                                onClick = { viewModel.stopTimer() },
+                                modifier = Modifier.weight(1f),
+                                enabled = viewModel.timerValue > 0
+                            ) {
+                                Text("Stop")
+                            }
+                        }
+                    }
+
 
                     // Sekcja notatek (działająca)
                     Spacer(modifier = Modifier.height(16.dp))

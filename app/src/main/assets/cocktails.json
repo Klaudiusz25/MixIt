@@ -13,8 +13,8 @@
     "timer": 120,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "mojito",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2016/02/mojito_cocktail2.jpg"
   },
   {
     "id": 2,
@@ -29,8 +29,8 @@
     "timer": 180,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "margarita",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2018/02/GloryMargarita13ozSHS16.jpg"
   },
   {
     "id": 3,
@@ -45,8 +45,8 @@
     "timer": 150,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "pina_colada",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2016/02/Draaanks-Pina-Colada_(1).jpeg"
   },
   {
     "id": 4,
@@ -61,8 +61,8 @@
     "timer": 90,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "sex_on_beach",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2016/02/sex_on_the_beach_iba.jpg"
   },
   {
     "id": 5,
@@ -78,8 +78,8 @@
     "timer": 210,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "cosmopolitan",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2018/02/Cosmopolitan-1024x683.jpg"
   },
   {
     "id": 6,
@@ -96,8 +96,8 @@
     "timer": 240,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "mai_tai",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2018/02/765-mai-tai-coctail-ricetta-originale-del-drink-americano.jpg"
   },
   {
     "id": 7,
@@ -112,8 +112,8 @@
     "timer": 90,
     "category": "easy",
     "alcoholic": false,
-    "imageRes": "virgin_mojito",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2016/02/virgin_mojito_cocktail_recipe.jpg"
   },
   {
     "id": 8,
@@ -128,8 +128,8 @@
     "timer": 60,
     "category": "easy",
     "alcoholic": false,
-    "imageRes": "shirley_temple",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.saq.com/media/catalog/product/s/h/shirley-temple-ec-1_1610405159.png?width=506&height=550&canvas=506,550&optimize=high&fit=bounds&format=jpeg"
   },
   {
     "id": 9,
@@ -145,8 +145,8 @@
     "timer": 180,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "old_fashioned",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2019/11/old-fashioned-cocktail.jpg"
   },
   {
     "id": 10,
@@ -161,8 +161,8 @@
     "timer": 210,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "espresso_martini",
-    "notes": ""
+    "notes": "",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2016/02/espresso_martini_cocktail.jpg"
   },
   {
     "id": 11,
@@ -177,7 +177,7 @@
     "timer": 90,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "aperol_spritz",
+    "imageUrl": "https://asset-ng.skoiy.com/dkms3owls2edqvm/z2d17tt51s7a.jpg?w=972&q=80&fm=webp&crop=1680,1680,287,0",
     "notes": ""
   },
   {
@@ -193,7 +193,7 @@
     "timer": 120,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "blue_lagoon",
+    "imageUrl": "https://www.liquor.com/thmb/H9eFTTGikD4A45dua6Z7pBL8_hY=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__liquor__2019__07__12152657__blue-lagoon-720x720-recipe-647fb82bc3214de68e0eed9aed5afbfa.jpg",
     "notes": ""
   },
   {
@@ -208,7 +208,7 @@
     "timer": 120,
     "category": "easy",
     "alcoholic": false,
-    "imageRes": "virgin_pina_colada",
+    "imageUrl": "https://platedcravings.com/wp-content/uploads/2022/06/Virgin-Pina-Colada-Plated-Cravings-8.jpg",
     "notes": ""
   },
   {
@@ -224,7 +224,7 @@
     "timer": 150,
     "category": "hard",
     "alcoholic": true,
-    "imageRes": "negroni",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2018/02/00_negroni_jpg-600x390.jpg",
     "notes": ""
   },
   {
@@ -239,7 +239,7 @@
     "timer": 60,
     "category": "easy",
     "alcoholic": true,
-    "imageRes": "mimosa",
+    "imageUrl": "https://www.mixolopedia.com/wp-content/uploads/2016/02/mimosa_cocktail.jpg",
     "notes": ""
   }
 ]

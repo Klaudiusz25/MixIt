@@ -23,6 +23,8 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -122,7 +124,9 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
                     } else {
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
-                            contentPadding = PaddingValues(8.dp)
+                            contentPadding = PaddingValues(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             items(filteredCocktails) { cocktail ->
                                 CocktailCard(cocktail = cocktail, onClick = onSelect)
@@ -268,21 +272,20 @@ fun CocktailCard(cocktail: Cocktail, onClick: (Cocktail) -> Unit) {
             .fillMaxWidth()
             .aspectRatio(0.75f)
             .clickable { onClick(cocktail) },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp,
+            pressedElevation = 8.dp,
+            hoveredElevation = 6.dp
+        )
     ) {
         Column {
-            Box(
+            AsyncImage(
+                model = cocktail.imageUrl, // URL zdjęcia
+                contentDescription = cocktail.name,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.LocalBar,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp).align(Alignment.Center)
-                )
-            }
+                    .weight(1f),
+            )
             Text(
                 text = cocktail.name,
                 style = MaterialTheme.typography.titleMedium,

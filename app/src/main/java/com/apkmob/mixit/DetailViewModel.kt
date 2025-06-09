@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
     var timerValue by mutableStateOf(0)
-    var running by mutableStateOf(false)
+    var isTimerRunning by mutableStateOf(false)
     private var job: Job? = null
 
     private var _cocktail = mutableStateOf<Cocktail?>(null)
@@ -34,9 +34,9 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun startTimer() {
-        running = true
+        isTimerRunning = true
         job = viewModelScope.launch {
-            while (running) {
+            while (isTimerRunning) {
                 delay(1000L)
                 timerValue++
             }
@@ -44,19 +44,19 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun stopTimer() {
-        running = false
+        isTimerRunning = false
         timerValue = 0
         job?.cancel()
     }
 
     fun pauseTimer() {
-        running = false
+        isTimerRunning = false
         job?.cancel()
     }
 
     fun resumeTimer() {
-        if (!running) {
-            running = true
+        if (!isTimerRunning) {
+            isTimerRunning = true
             startTimer()
         }
     }
