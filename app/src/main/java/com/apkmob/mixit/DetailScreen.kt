@@ -1,6 +1,5 @@
 package com.apkmob.mixit
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,9 +19,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberAsyncImagePainter
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -142,6 +142,13 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
                         ) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(150.dp),
+                                progress = {
+                                    if (cocktail.timer > 0) {
+                                        1f - (viewModel.timerValue.toFloat() / cocktail.timer.toFloat())
+                                    } else {
+                                        0f
+                                    }
+                                },
                                 strokeWidth = 8.dp,
                                 color = MaterialTheme.colorScheme.primary,
                                 trackColor = MaterialTheme.colorScheme.surfaceVariant

@@ -28,6 +28,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -66,6 +67,15 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.30.1")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+
+    // Jeśli używasz animation dla progress indicator
+    implementation("androidx.compose.animation:animation:1.6.7")
+
+    // Dla splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 
     implementation(libs.androidx.core.ktx)
