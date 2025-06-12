@@ -18,18 +18,21 @@ import androidx.compose.ui.platform.LocalContext
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.remember
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberAsyncImagePainter
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: () -> Unit) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollState = rememberScrollState()
 
     fun prepareSmsMessage(): String {
         return buildString {
@@ -58,7 +61,7 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
                 onClick = { openSmsApp() },
                 modifier = Modifier.padding(bottom = 80.dp),
                 icon = { Icon(Icons.Default.Send, contentDescription = "Wyślij") },
-                text = { Text("Wyślij składniki") }
+                text = { Text("") }
             )
         },
         topBar = {
@@ -73,148 +76,230 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
             )
         }
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .verticalScroll(scrollState)
         ) {
-            // Obraz koktajlu
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp) // Większa wysokość dla pionowego układu
+                    .padding(padding)
             ) {
-                if (cocktail.imageUrl.isNotEmpty()) {
-                    Image(
-                        painter = rememberAsyncImagePainter(cocktail.imageUrl),
-                        contentDescription = "Zdjęcie koktajlu",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(400.dp), // Stała wysokość
-                        contentScale = ContentScale.Fit // Pokazuje cały obrazek bez przycinania
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.LocalBar,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp).align(Alignment.Center)
-                    )
+                // Obraz koktajlu
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(300.dp)
+                ) {
+                    if (!cocktail.imageUrl.isNullOrEmpty()) {
+                        Image(
+                            painter = rememberAsyncImagePainter(cocktail.imageUrl),
+                            contentDescription = "Zdjęcie koktajlu",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(400.dp),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.LocalBar,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp).align(Alignment.Center),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
-            }
 
-            // Reszta zawartości
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = "Składniki:",
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = cocktail.ingredients.joinToString("\n"))
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Instrukcje:",
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = cocktail.instructions)
-
-                // Sekcja timera
-                if (cocktail.timer > 0) {
-                    val formattedTime by remember(viewModel.timerValue) {
-                        derivedStateOf {
-                            val minutes = viewModel.timerValue / 60
-                            val seconds = viewModel.timerValue % 60
-                            String.format("%02d:%02d", minutes, seconds)
+                // Główna zawartość
+                Column(modifier = Modifier.padding(16.dp)) {
+                    // Sekcja składników
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "Składniki:",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = cocktail.ingredients.joinToString("\n") { "• $it" },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
                         }
                     }
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp)
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Sekcja instrukcji
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
                     ) {
-                        // Okrągły timer
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.size(150.dp).align(Alignment.CenterHorizontally)
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "Instrukcje:",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = cocktail.instructions,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+
+                    // Sekcja timera
+                    if (cocktail.timer > 0) {
+                        val formattedTime by remember(viewModel.timerValue) {
+                            derivedStateOf {
+                                val minutes = viewModel.timerValue / 60
+                                val seconds = viewModel.timerValue % 60
+                                String.format("%02d:%02d", minutes, seconds)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Text(
+                            text = "Timer",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Główny wiersz z timerem i przyciskami
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(150.dp),
-                                progress = {
-                                    if (cocktail.timer > 0) {
-                                        1f - (viewModel.timerValue.toFloat() / cocktail.timer.toFloat())
-                                    } else {
-                                        0f
+                            // Przyciski kontrolne
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Button(
+                                    onClick = { viewModel.startTimer() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    enabled = !viewModel.isTimerRunning && viewModel.timerValue == viewModel.initialTimerValue
+                                ) {
+                                    Text("Start")
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Button(
+                                    onClick = { viewModel.pauseTimer() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    enabled = viewModel.isTimerRunning
+                                ) {
+                                    Text("Pauza")
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Button(
+                                    onClick = { viewModel.resumeTimer() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    enabled = !viewModel.isTimerRunning && viewModel.timerValue > 0 && viewModel.timerValue < viewModel.initialTimerValue
+                                ) {
+                                    Text("Wznów")
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Button(
+                                    onClick = { viewModel.stopTimer() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    enabled = viewModel.timerValue > 0
+                                ) {
+                                    Text("Stop")
+                                }
+                            }
+
+                            // Wizualizacja timera
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.size(150.dp)
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(150.dp),
+                                    progress = {
+                                        if (cocktail.timer > 0) {
+                                            1f - (viewModel.timerValue.toFloat() / cocktail.timer.toFloat())
+                                        } else {
+                                            0f
+                                        }
+                                    },
+                                    strokeWidth = 8.dp,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    trackColor = MaterialTheme.colorScheme.surfaceVariant
+                                )
+
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    Text(
+                                        text = formattedTime,
+                                        style = MaterialTheme.typography.displayMedium
+                                    )
+                                }
+                            }
+                        }
+
+                        // Ustawienia timera
+                        Spacer(modifier = Modifier.height(16.dp))
+                        var newTimerValue by remember { mutableStateOf(cocktail.timer.toString()) }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            OutlinedTextField(
+                                value = newTimerValue,
+                                onValueChange = { newValue ->
+                                    if (newValue.isEmpty() || newValue.matches(Regex("^\\d*\$"))) {
+                                        newTimerValue = newValue
                                     }
                                 },
-                                strokeWidth = 8.dp,
-                                color = MaterialTheme.colorScheme.primary,
-                                trackColor = MaterialTheme.colorScheme.surfaceVariant
+                                label = { Text("Czas (sekundy)") },
+                                modifier = Modifier.weight(1f),
+                                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                             )
 
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(
-                                    text = "Timer",
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Text(
-                                    text = formattedTime,
-                                    style = MaterialTheme.typography.displayMedium
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        // Kontrolki timera - zachowane wszystkie 4 przyciski
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Button(
-                                onClick = { viewModel.startTimer() },
-                                modifier = Modifier.weight(1f),
-                                enabled = !viewModel.isTimerRunning && viewModel.timerValue == 0
-                            ) {
-                                Text("Start")
-                            }
+                            Spacer(modifier = Modifier.width(8.dp))
 
                             Button(
-                                onClick = { viewModel.pauseTimer() },
-                                modifier = Modifier.weight(1f),
-                                enabled = viewModel.isTimerRunning
+                                onClick = {
+                                    val time = newTimerValue.toIntOrNull() ?: cocktail.timer
+                                    viewModel.setTimer(time)
+                                },
+                                modifier = Modifier.height(56.dp)
                             ) {
-                                Text("Pauza")
-                            }
-
-                            Button(
-                                onClick = { viewModel.resumeTimer() },
-                                modifier = Modifier.weight(1f),
-                                enabled = !viewModel.isTimerRunning && viewModel.timerValue > 0
-                            ) {
-                                Text("Wznów")
-                            }
-
-                            Button(
-                                onClick = { viewModel.stopTimer() },
-                                modifier = Modifier.weight(1f),
-                                enabled = viewModel.timerValue > 0
-                            ) {
-                                Text("Stop")
+                                Text("Ustaw")
                             }
                         }
                     }
 
-
-                    // Sekcja notatek (działająca)
-                    Spacer(modifier = Modifier.height(16.dp))
+                    // Sekcja notatek
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = "Twoje notatki",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
                         value = viewModel.cocktail?.notes ?: "",
                         onValueChange = { viewModel.updateNotes(it) },
-                        label = { Text("Twoje notatki") },
-                        modifier = Modifier.fillMaxWidth()
+                        label = { Text("Dodaj swoje uwagi...") },
+                        modifier = Modifier.fillMaxWidth(),
+                        minLines = 3,
+                        maxLines = 5
                     )
                 }
             }

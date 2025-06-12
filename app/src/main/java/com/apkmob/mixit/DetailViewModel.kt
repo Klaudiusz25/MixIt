@@ -14,10 +14,12 @@ import kotlinx.coroutines.launch
 class DetailViewModel(application: Application) : AndroidViewModel(application) {
     var timerValue by mutableStateOf(0)
     var isTimerRunning by mutableStateOf(false)
+    internal var initialTimerValue by mutableStateOf(0)
     private var job: Job? = null
 
     private var _cocktail = mutableStateOf<Cocktail?>(null)
     val cocktail: Cocktail? get() = _cocktail.value
+
 
     fun loadCocktail(cocktailId: Int) {
         val cocktails = CocktailStorage.loadCocktails(getApplication())
@@ -25,8 +27,9 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun updateNotes(newNotes: String) {
-        _cocktail.value = _cocktail.value?.copy(notes = newNotes)
-        _cocktail.value?.let { updated ->
+        _cocktail.value?.let { current ->
+            val updated = current.copy(notes = newNotes)
+            _cocktail.value = updated
             val cocktails = CocktailStorage.loadCocktails(getApplication())
                 .map { if (it.id == updated.id) updated else it }
             CocktailStorage.saveCocktails(getApplication(), cocktails)
@@ -34,18 +37,20 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun startTimer() {
+        if (timerValue <= 0) timerValue = initialTimerValue // Resetuj, jeśli czas się skończył
         isTimerRunning = true
         job = viewModelScope.launch {
-            while (isTimerRunning) {
+            while (isTimerRunning && timerValue > 0) {
                 delay(1000L)
-                timerValue++
+                timerValue-- // Odliczanie w dół
             }
+            isTimerRunning = false
         }
     }
 
     fun stopTimer() {
         isTimerRunning = false
-        timerValue = 0
+        timerValue = initialTimerValue // Resetuj do początkowego czasu
         job?.cancel()
     }
 
@@ -59,5 +64,11 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
             isTimerRunning = true
             startTimer()
         }
+    }
+
+    // Dodaj metodę do ręcznego ustawienia czasu (np. przez użytkownika)
+    fun setTimer(newTime: Int) {
+        initialTimerValue = newTime
+        timerValue = newTime
     }
 }

@@ -13,5 +13,5 @@ data class Cocktail(
     val category: String,
     val alcoholic: Boolean,
     var notes: String = "",
-    val imageUrl: String = "" // Dodaj URL zdjęcia
+    val imageUrl: String? = null // Dodaj URL zdjęcia
 ) : Parcelable

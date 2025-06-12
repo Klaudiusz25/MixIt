@@ -77,6 +77,9 @@ dependencies {
     // Dla splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
 
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+    implementation("com.google.accompanist:accompanist-insets:0.30.1")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
