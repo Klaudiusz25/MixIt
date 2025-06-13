@@ -1,6 +1,5 @@
 package com.apkmob.mixit
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -9,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocalBar
+import androidx.compose.material.icons.filled.LocalCafe
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -19,16 +19,20 @@ import androidx.compose.ui.unit.dp
 import com.apkmob.mixit.data.Cocktail
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
+    val isTablet = isTablet()
     val tabs = listOf("Strona główna", "Łatwe", "Trudne", "Alkoholowe", "Bezalkoholowe")
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -55,18 +59,16 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
                 Divider()
                 tabs.forEachIndexed { index, title ->
                     if (index > 0) {
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    scope.launch {
-                                        pagerState.animateScrollToPage(index)
-                                        drawerState.close()
-                                    }
+                        NavigationDrawerItem(
+                            label = { Text(title) },
+                            selected = pagerState.currentPage == index,
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                    drawerState.close()
                                 }
-                                .padding(16.dp)
+                            },
+                            modifier = Modifier.padding(8.dp)
                         )
                     }
                 }
@@ -101,7 +103,7 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
             }
         ) { padding ->
             Column(modifier = Modifier.padding(padding)) {
-                if (!isSearchActive) {
+                if (!isSearchActive && !isTablet) {
                     TabRow(selectedTabIndex = pagerState.currentPage) {
                         tabs.forEachIndexed { index, title ->
                             Tab(
@@ -113,24 +115,15 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
                     }
                 }
 
-                if (isSearchActive) {
-                    if (filteredCocktails.isEmpty()) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Nie znaleziono koktajli")
-                        }
-                    } else {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            contentPadding = PaddingValues(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            items(filteredCocktails) { cocktail ->
-                                CocktailCard(cocktail = cocktail, onClick = onSelect)
-                            }
+                if (isSearchActive || isTablet) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(if (isTablet) 3 else 2),
+                        contentPadding = PaddingValues(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(filteredCocktails) { cocktail ->
+                            CocktailCard(cocktail = cocktail, onClick = onSelect)
                         }
                     }
                 } else {
@@ -141,7 +134,7 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
                     ) { page ->
                         when (page) {
                             0 -> HomeScreen(cocktails = filteredCocktails, onSelect = onSelect)
-                            1 -> { // Łatwe
+                            1 -> {
                                 val categoryCocktails = filteredCocktails.filter {
                                     it.category.equals("Easy", ignoreCase = true)
                                 }
@@ -151,7 +144,7 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
                                     onSelect = onSelect
                                 )
                             }
-                            2 -> { // Trudne
+                            2 -> {
                                 val categoryCocktails = filteredCocktails.filter {
                                     it.category.equals("Hard", ignoreCase = true)
                                 }
@@ -161,7 +154,7 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
                                     onSelect = onSelect
                                 )
                             }
-                            3 -> { // Alkoholowe
+                            3 -> {
                                 val categoryCocktails = filteredCocktails.filter { it.alcoholic }
                                 CategoryScreen(
                                     category = tabs[page],
@@ -169,7 +162,7 @@ fun MainScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
                                     onSelect = onSelect
                                 )
                             }
-                            4 -> { // Bezalkoholowe
+                            4 -> {
                                 val categoryCocktails = filteredCocktails.filter { !it.alcoholic }
                                 CategoryScreen(
                                     category = tabs[page],
@@ -218,28 +211,136 @@ fun SearchBar(
 @Composable
 fun HomeScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
     Column(modifier = Modifier.padding(16.dp)) {
+        // Nagłówek z przywitaniem
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Witaj w Mix It!",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Odkrywaj i twórz niesamowite koktajle",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+
+        // Sekcja polecanych koktajli
         Text(
-            text = "Witaj w Mix It!",
-            style = MaterialTheme.typography.headlineMedium
+            text = "Polecane koktajle",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(vertical = 8.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Odkrywaj i twórz niesamowite koktajle z naszą aplikacją.",
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Spacer(modifier = Modifier.height(16.dp))
 
         if (cocktails.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentAlignment = Alignment.Center
+            ) {
                 Text("Brak koktajli do wyświetlenia")
             }
         } else {
+            // Ulepszone karty koktajli
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(8.dp)
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(cocktails) { cocktail ->
-                    CocktailCard(cocktail = cocktail, onClick = onSelect)
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(0.75f)
+                            .clickable { onSelect(cocktail) },
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 4.dp,
+                            pressedElevation = 8.dp
+                        )
+                    ) {
+                        Column {
+                            // Obraz koktajlu z overlayem nazwy
+                            Box(modifier = Modifier.weight(1f)) {
+                                AsyncImage(
+                                    model = cocktail.imageUrl,
+                                    contentDescription = cocktail.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+
+                                // Gradient overlay
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(
+                                            brush = Brush.verticalGradient(
+                                                colors = listOf(
+                                                    Color.Transparent,
+                                                    Color.Black.copy(alpha = 0.7f)
+                                                ),
+                                                startY = 0.6f
+                                            )
+                                        )
+                                )
+
+                                // Nazwa koktajlu na dole obrazka
+                                Text(
+                                    text = cocktail.name,
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    modifier = Modifier
+                                        .align(Alignment.BottomStart)
+                                        .padding(12.dp)
+                                )
+                            }
+
+                            // Informacje dodatkowe
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Ikona alkoholu
+                                Icon(
+                                    imageVector = if (cocktail.alcoholic) Icons.Default.LocalBar else Icons.Default.LocalCafe,
+                                    contentDescription = if (cocktail.alcoholic) "Alkoholowy" else "Bezalkoholowy",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+
+                                // Trudność
+                                Text(
+                                    text = when {
+                                        cocktail.category.equals("easy", ignoreCase = true) -> "Łatwy"
+                                        cocktail.category.equals("hard", ignoreCase = true) -> "Trudny"
+                                        else -> cocktail.category
+                                    },
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -248,17 +349,131 @@ fun HomeScreen(cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
 
 @Composable
 fun CategoryScreen(category: String, cocktails: List<Cocktail>, onSelect: (Cocktail) -> Unit) {
-    if (cocktails.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Brak dostępnych koktajli $category")
-        }
-    } else {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(8.dp)
+    Column(modifier = Modifier.padding(16.dp)) {
+        // Nagłówek z nazwą kategorii
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
-            items(cocktails) { cocktail ->
-                CocktailCard(cocktail = cocktail, onClick = onSelect)
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = category,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Znaleziono ${cocktails.size} koktajli",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+
+        if (cocktails.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Brak koktajli w tej kategorii")
+            }
+        } else {
+            // Ulepszone karty koktajli - takie same jak na stronie głównej
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(cocktails) { cocktail ->
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(0.75f)
+                            .clickable { onSelect(cocktail) },
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 4.dp,
+                            pressedElevation = 8.dp
+                        )
+                    ) {
+                        Column {
+                            // Obraz koktajlu z overlayem nazwy
+                            Box(modifier = Modifier.weight(1f)) {
+                                AsyncImage(
+                                    model = cocktail.imageUrl,
+                                    contentDescription = cocktail.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+
+                                // Gradient overlay
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(
+                                            brush = Brush.verticalGradient(
+                                                colors = listOf(
+                                                    Color.Transparent,
+                                                    Color.Black.copy(alpha = 0.7f)
+                                                ),
+                                                startY = 0.6f
+                                            )
+                                        )
+                                )
+
+                                // Nazwa koktajlu na dole obrazka
+                                Text(
+                                    text = cocktail.name,
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    modifier = Modifier
+                                        .align(Alignment.BottomStart)
+                                        .padding(12.dp)
+                                )
+                            }
+
+                            // Informacje dodatkowe
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Ikona alkoholu
+                                Icon(
+                                    imageVector = if (cocktail.alcoholic) Icons.Default.LocalBar else Icons.Default.LocalCafe,
+                                    contentDescription = if (cocktail.alcoholic) "Alkoholowy" else "Bezalkoholowy",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+
+                                // Trudność
+                                Text(
+                                    text = when {
+                                        cocktail.category.equals("easy", ignoreCase = true) -> "Łatwy"
+                                        cocktail.category.equals("hard", ignoreCase = true) -> "Trudny"
+                                        else -> cocktail.category
+                                    },
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }

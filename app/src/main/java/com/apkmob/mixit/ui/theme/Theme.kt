@@ -32,8 +32,8 @@ private val LightColorScheme = lightColorScheme(
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFDAA520),  // złoty
-    secondary = Color(0xFF8B4513), // brązowy
+    primary = Color(0xFF8B4513),  // złoty
+    secondary = Color(0xFFDAA520), // brązowy
     tertiary = Color(0xFFCD5C5C),  // czerwony
     background = Color(0xFF121212),
     surface = Color(0xFF1E1E1E),

@@ -38,6 +38,8 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -68,7 +70,6 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
     implementation("io.coil-kt:coil-compose:2.6.0")
 
-    implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
 
     // Jeśli używasz animation dla progress indicator
@@ -79,6 +80,10 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
     implementation("com.google.accompanist:accompanist-insets:0.30.1")
+
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.12.0")
+
 
 
     implementation(libs.androidx.core.ktx)

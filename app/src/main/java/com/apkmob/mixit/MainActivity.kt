@@ -13,7 +13,9 @@ import android.content.Intent
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val cocktails = loadCocktailsFromAssets()
+
         setContent {
             MixItTheme {
                 MixItApp(

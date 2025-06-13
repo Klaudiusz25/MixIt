@@ -29,7 +29,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: () -> Unit) {
+fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: () -> Unit, isTablet: Boolean) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val scrollState = rememberScrollState()
@@ -41,6 +41,8 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
             append("\n\nInstrukcje:\n${cocktail.instructions}")
         }
     }
+
+
 
     fun openSmsApp() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
@@ -220,7 +222,7 @@ fun DetailScreen(cocktail: Cocktail, viewModel: DetailViewModel, onBackPressed: 
                                     modifier = Modifier.fillMaxWidth(),
                                     enabled = viewModel.timerValue > 0
                                 ) {
-                                    Text("Stop")
+                                    Text("Reset")
                                 }
                             }
 

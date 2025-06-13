@@ -10,27 +10,46 @@ import com.apkmob.mixit.ui.theme.MixItTheme
 
 class DetailActivity : ComponentActivity() {
     private val viewModel: DetailViewModel by viewModels {
-        DetailViewModelFactory(application, intent.getParcelableExtra<Cocktail>("cocktail")?.id ?: 0)
+        DetailViewModelFactory(
+            application,
+            intent.getParcelableExtra<Cocktail>("cocktail")?.id ?: 0
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val cocktail = intent.getParcelableExtra<Cocktail>("cocktail")
+        val isTablet = resources.getBoolean(R.bool.isTablet)
 
-        if (cocktail == null) {
-            Toast.makeText(this, "Błąd: brak koktajlu", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
+        if (isTablet) {
+            setContent {
+                MixItTheme {
+                    val cocktails = CocktailStorage.loadCocktails(this)
+                    val selectedId = intent.getParcelableExtra<Cocktail>("cocktail")?.id ?: 0
+                    TabletDetailLayout(
+                        cocktails = cocktails,
+                        selectedId = selectedId,
+                        onBackPressed = { finish() }
+                    )
+                }
+            }
+        } else {
+            val cocktail = intent.getParcelableExtra<Cocktail>("cocktail")
+            if (cocktail == null) {
+                Toast.makeText(this, "Błąd: brak koktajlu", Toast.LENGTH_SHORT).show()
+                finish()
+                return
+            }
 
-        setContent {
-            MixItTheme {
-                viewModel.loadCocktail(cocktail.id)
-                DetailScreen(
-                    cocktail = cocktail,
-                    viewModel = viewModel,
-                    onBackPressed = { finish() }
-                )
+            setContent {
+                MixItTheme {
+                    viewModel.loadCocktail(cocktail.id)
+                    DetailScreen(
+                        cocktail = cocktail,
+                        viewModel = viewModel,
+                        onBackPressed = { finish() },
+                        isTablet = false
+                    )
+                }
             }
         }
     }
